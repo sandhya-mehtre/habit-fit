@@ -1,7 +1,7 @@
 import { useForm, Controller } from 'react-hook-form';
 import type { HabitFormValues } from '@/types';
 import { HABIT_CATEGORIES, HABIT_COLORS, HABIT_ICONS } from '@/constants';
-import { Input, Select, Textarea } from '@/components/ui/FormFields';
+import { Input, Select } from '@/components/ui/FormFields';
 import Button from '@/components/ui/Button';
 import { clsx } from '@/utils/helpers';
 

@@ -1,8 +1,10 @@
 import { useForm, Controller } from 'react-hook-form';
 import type { HabitFormValues } from '@/types';
 import { HABIT_CATEGORIES, HABIT_COLORS, HABIT_ICONS } from '@/constants';
-import { Input, Select } from '@/components/ui/FormFields';
+import { DEFAULT_HABIT_ICON } from '@/constants/icons';
+import { Input, Select, Textarea } from '@/components/ui/FormFields';
 import Button from '@/components/ui/Button';
+import HabitIcon from '@/components/ui/HabitIcon';
 import { clsx } from '@/utils/helpers';
 
 interface HabitFormProps {
@@ -19,7 +21,7 @@ const DEFAULT_FORM: HabitFormValues = {
   frequency: 'daily',
   targetDays: 7,
   color: HABIT_COLORS[0],
-  icon: HABIT_ICONS[0],
+  icon: DEFAULT_HABIT_ICON,
 };
 
 const HabitForm = ({ defaultValues, onSubmit, onCancel, isLoading }: HabitFormProps) => {
@@ -49,21 +51,18 @@ const HabitForm = ({ defaultValues, onSubmit, onCancel, isLoading }: HabitFormPr
       />
 
       {/* Description */}
-      <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Description</label>
-        <textarea
-          placeholder="Optional description..."
-          rows={2}
-          className="w-full rounded-xl border border-surface-200 dark:border-surface-600 bg-white dark:bg-surface-900 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary-500/40 focus:border-primary-500"
-          {...register('description')}
-        />
-      </div>
+      <Textarea
+        label="Description"
+        placeholder="Optional description..."
+        rows={2}
+        {...register('description')}
+      />
 
       {/* Category + Frequency row */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Select
           label="Category"
-          options={HABIT_CATEGORIES.map((c) => ({ value: c.value, label: `${c.emoji} ${c.label}` }))}
+          options={HABIT_CATEGORIES.map((c) => ({ value: c.value, label: c.label }))}
           error={errors.category?.message}
           {...register('category', { required: true })}
         />
@@ -101,19 +100,20 @@ const HabitForm = ({ defaultValues, onSubmit, onCancel, isLoading }: HabitFormPr
           control={control}
           render={({ field }) => (
             <div className="flex flex-wrap gap-2">
-              {HABIT_ICONS.map((icon) => (
+              {HABIT_ICONS.map((iconKey) => (
                 <button
-                  key={icon}
+                  key={iconKey}
                   type="button"
-                  onClick={() => field.onChange(icon)}
+                  onClick={() => field.onChange(iconKey)}
+                  aria-label={iconKey}
                   className={clsx(
-                    'w-9 h-9 rounded-xl text-lg flex items-center justify-center transition-all',
-                    field.value === icon
-                      ? 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-900/30 scale-110'
-                      : 'bg-surface-100 dark:bg-surface-700 hover:bg-surface-200 dark:hover:bg-surface-600'
+                    'w-9 h-9 rounded-xl flex items-center justify-center transition-all',
+                    field.value === iconKey
+                      ? 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-900/30 scale-110 text-primary-600 dark:text-primary-400'
+                      : 'bg-surface-100 dark:bg-surface-700 hover:bg-surface-200 dark:hover:bg-surface-600 text-slate-600 dark:text-slate-300'
                   )}
                 >
-                  {icon}
+                  <HabitIcon iconKey={iconKey} size={18} />
                 </button>
               ))}
             </div>

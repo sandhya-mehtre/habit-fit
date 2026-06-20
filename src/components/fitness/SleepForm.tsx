@@ -25,7 +25,7 @@ const SleepForm = ({ onSubmit, onCancel, defaultValues }: SleepFormProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Input
           label="Hours Slept"
           type="number"
@@ -47,7 +47,7 @@ const SleepForm = ({ onSubmit, onCancel, defaultValues }: SleepFormProps) => {
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Input label="Bedtime" type="time" {...register('bedtime')} />
         <Input label="Wake Time" type="time" {...register('wakeTime')} />
       </div>

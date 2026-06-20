@@ -25,3 +25,11 @@ export const removeFromStorage = (key: string): void => {
 export const clearAllStorage = (): void => {
   Object.values(STORAGE_KEYS).forEach(removeFromStorage);
 };
+
+/**
+ * Namespaces a base storage key by the currently logged-in user's id so that
+ * each user's habits/workouts/weight/water/sleep data stay isolated within
+ * the same browser's localStorage.
+ */
+export const userScopedKey = (baseKey: string, userId: string | null): string =>
+  userId ? `${baseKey}::${userId}` : `${baseKey}::guest`;

@@ -1,23 +1,33 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { Habit, HabitFormValues } from '@/types';
 import { STORAGE_KEYS } from '@/constants';
-import { loadFromStorage, saveToStorage } from '@/utils/storageUtils';
+import { loadFromStorage, saveToStorage, userScopedKey } from '@/utils/storageUtils';
 import { generateId } from '@/utils/helpers';
 import { calculateStreak, calculateLongestStreak } from '@/utils/habitUtils';
 import { todayString } from '@/utils/dateUtils';
 
 interface HabitsState {
   items: Habit[];
+  userId: string | null;
 }
 
 const initialState: HabitsState = {
-  items: loadFromStorage<Habit[]>(STORAGE_KEYS.HABITS, []),
+  items: [],
+  userId: null,
 };
 
 const habitsSlice = createSlice({
   name: 'habits',
   initialState,
   reducers: {
+    setActiveUser: (state, action: PayloadAction<string | null>) => {
+      state.userId = action.payload;
+      state.items = loadFromStorage<Habit[]>(
+        userScopedKey(STORAGE_KEYS.HABITS, action.payload),
+        []
+      );
+    },
+
     addHabit: (state, action: PayloadAction<HabitFormValues>) => {
       const habit: Habit = {
         id: generateId(),
@@ -28,7 +38,7 @@ const habitsSlice = createSlice({
         longestStreak: 0,
       };
       state.items.push(habit);
-      saveToStorage(STORAGE_KEYS.HABITS, state.items);
+      saveToStorage(userScopedKey(STORAGE_KEYS.HABITS, state.userId), state.items);
     },
 
     updateHabit: (
@@ -41,13 +51,13 @@ const habitsSlice = createSlice({
           ...state.items[idx],
           ...action.payload.values,
         };
-        saveToStorage(STORAGE_KEYS.HABITS, state.items);
+        saveToStorage(userScopedKey(STORAGE_KEYS.HABITS, state.userId), state.items);
       }
     },
 
     deleteHabit: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter((h) => h.id !== action.payload);
-      saveToStorage(STORAGE_KEYS.HABITS, state.items);
+      saveToStorage(userScopedKey(STORAGE_KEYS.HABITS, state.userId), state.items);
     },
 
     toggleCompletion: (
@@ -64,21 +74,17 @@ const habitsSlice = createSlice({
       habit.streak = calculateStreak(habit.completions);
       habit.longestStreak = calculateLongestStreak(habit.completions);
 
-      saveToStorage(STORAGE_KEYS.HABITS, state.items);
-    },
-
-    rehydrateHabits: (state) => {
-      state.items = loadFromStorage<Habit[]>(STORAGE_KEYS.HABITS, []);
+      saveToStorage(userScopedKey(STORAGE_KEYS.HABITS, state.userId), state.items);
     },
   },
 });
 
 export const {
+  setActiveUser,
   addHabit,
   updateHabit,
   deleteHabit,
   toggleCompletion,
-  rehydrateHabits,
 } = habitsSlice.actions;
 
 export default habitsSlice.reducer;

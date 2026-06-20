@@ -7,6 +7,7 @@ import { getLast7Days, formatShortDate } from '@/utils/dateUtils';
 import { WATER_GOAL_ML } from '@/constants';
 import Card from '@/components/ui/Card';
 import EmptyState from '@/components/ui/EmptyState';
+import { Droplet } from 'lucide-react';
 
 const WaterIntakeChart = () => {
   const entries = useAppSelector((s) => s.water.entries);
@@ -24,7 +25,7 @@ const WaterIntakeChart = () => {
   if (entries.length === 0) {
     return (
       <Card>
-        <EmptyState icon="💧" title="No water logged" description="Log your water intake to see your weekly hydration chart." />
+        <EmptyState icon={Droplet} title="No water logged" description="Log your water intake to see your weekly hydration chart." />
       </Card>
     );
   }

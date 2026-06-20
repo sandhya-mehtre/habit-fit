@@ -39,10 +39,10 @@ const WorkoutForm = ({ defaultValues, onSubmit, onCancel, isLoading }: WorkoutFo
         {...register('name', { required: 'Name is required' })}
       />
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Select
           label="Type"
-          options={WORKOUT_TYPES.map((t) => ({ value: t.value, label: `${t.emoji} ${t.label}` }))}
+          options={WORKOUT_TYPES.map((t) => ({ value: t.value, label: t.label }))}
           {...register('type', { required: true })}
         />
         <Input
@@ -53,7 +53,7 @@ const WorkoutForm = ({ defaultValues, onSubmit, onCancel, isLoading }: WorkoutFo
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Input
           label="Duration (minutes)"
           type="number"

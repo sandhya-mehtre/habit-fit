@@ -1,5 +1,6 @@
-import { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Plus } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { addHabit, updateHabit, deleteHabit, toggleCompletion } from '@/store/slices/habitsSlice';
@@ -68,11 +69,7 @@ const HabitsPage = () => {
         <p className="text-sm text-slate-500 dark:text-slate-400">
           {habits.length} habit{habits.length !== 1 ? 's' : ''} tracked
         </p>
-        <Button onClick={openCreateForm} icon={
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-        }>
+        <Button onClick={openCreateForm} icon={<Plus size={16} />}>
           New Habit
         </Button>
       </div>

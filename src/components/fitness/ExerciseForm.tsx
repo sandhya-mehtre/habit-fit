@@ -24,12 +24,12 @@ const ExerciseForm = ({ onSubmit, onCancel }: ExerciseFormProps) => {
         {...register('name', { required: 'Exercise name is required' })}
       />
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Input label="Sets" type="number" min={0} {...register('sets', { valueAsNumber: true })} />
         <Input label="Reps" type="number" min={0} {...register('reps', { valueAsNumber: true })} />
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <Input label="Weight (kg)" type="number" min={0} step={0.5} {...register('weight', { valueAsNumber: true })} />
         <Input label="Duration (min)" type="number" min={0} {...register('duration', { valueAsNumber: true })} />
       </div>

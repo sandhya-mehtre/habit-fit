@@ -7,6 +7,7 @@ import { getLast7Days, formatShortDate } from '@/utils/dateUtils';
 import { SLEEP_GOAL_HOURS } from '@/constants';
 import Card from '@/components/ui/Card';
 import EmptyState from '@/components/ui/EmptyState';
+import { Moon } from 'lucide-react';
 
 const SleepTrendChart = () => {
   const entries = useAppSelector((s) => s.sleep.entries);
@@ -27,7 +28,7 @@ const SleepTrendChart = () => {
   if (entries.length === 0) {
     return (
       <Card>
-        <EmptyState icon="😴" title="No sleep data" description="Log your sleep hours to track your rest patterns." />
+        <EmptyState icon={Moon} title="No sleep data" description="Log your sleep hours to track your rest patterns." />
       </Card>
     );
   }

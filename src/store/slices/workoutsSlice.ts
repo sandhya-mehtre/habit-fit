@@ -1,21 +1,31 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { Workout, WorkoutFormValues, Exercise } from '@/types';
 import { STORAGE_KEYS } from '@/constants';
-import { loadFromStorage, saveToStorage } from '@/utils/storageUtils';
+import { loadFromStorage, saveToStorage, userScopedKey } from '@/utils/storageUtils';
 import { generateId } from '@/utils/helpers';
 
 interface WorkoutsState {
   items: Workout[];
+  userId: string | null;
 }
 
 const initialState: WorkoutsState = {
-  items: loadFromStorage<Workout[]>(STORAGE_KEYS.WORKOUTS, []),
+  items: [],
+  userId: null,
 };
 
 const workoutsSlice = createSlice({
   name: 'workouts',
   initialState,
   reducers: {
+    setActiveUser: (state, action: PayloadAction<string | null>) => {
+      state.userId = action.payload;
+      state.items = loadFromStorage<Workout[]>(
+        userScopedKey(STORAGE_KEYS.WORKOUTS, action.payload),
+        []
+      );
+    },
+
     addWorkout: (state, action: PayloadAction<WorkoutFormValues>) => {
       const workout: Workout = {
         id: generateId(),
@@ -24,7 +34,7 @@ const workoutsSlice = createSlice({
         createdAt: new Date().toISOString(),
       };
       state.items.unshift(workout);
-      saveToStorage(STORAGE_KEYS.WORKOUTS, state.items);
+      saveToStorage(userScopedKey(STORAGE_KEYS.WORKOUTS, state.userId), state.items);
     },
 
     updateWorkout: (
@@ -34,13 +44,13 @@ const workoutsSlice = createSlice({
       const idx = state.items.findIndex((w) => w.id === action.payload.id);
       if (idx !== -1) {
         state.items[idx] = { ...state.items[idx], ...action.payload.values };
-        saveToStorage(STORAGE_KEYS.WORKOUTS, state.items);
+        saveToStorage(userScopedKey(STORAGE_KEYS.WORKOUTS, state.userId), state.items);
       }
     },
 
     deleteWorkout: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter((w) => w.id !== action.payload);
-      saveToStorage(STORAGE_KEYS.WORKOUTS, state.items);
+      saveToStorage(userScopedKey(STORAGE_KEYS.WORKOUTS, state.userId), state.items);
     },
 
     addExercise: (
@@ -50,7 +60,7 @@ const workoutsSlice = createSlice({
       const workout = state.items.find((w) => w.id === action.payload.workoutId);
       if (workout) {
         workout.exercises.push({ id: generateId(), ...action.payload.exercise });
-        saveToStorage(STORAGE_KEYS.WORKOUTS, state.items);
+        saveToStorage(userScopedKey(STORAGE_KEYS.WORKOUTS, state.userId), state.items);
       }
     },
 
@@ -63,13 +73,14 @@ const workoutsSlice = createSlice({
         workout.exercises = workout.exercises.filter(
           (e) => e.id !== action.payload.exerciseId
         );
-        saveToStorage(STORAGE_KEYS.WORKOUTS, state.items);
+        saveToStorage(userScopedKey(STORAGE_KEYS.WORKOUTS, state.userId), state.items);
       }
     },
   },
 });
 
 export const {
+  setActiveUser,
   addWorkout,
   updateWorkout,
   deleteWorkout,

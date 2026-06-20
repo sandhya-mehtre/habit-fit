@@ -1,20 +1,23 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { LayoutDashboard, CheckCircle2, Dumbbell, BarChart3, User, type LucideIcon } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setSidebarOpen } from '@/store/slices/uiSlice';
 import { clsx } from '@/utils/helpers';
 
-const NAV_ITEMS = [
-  { path: '/',          label: 'Dashboard',  icon: '🏠' },
-  { path: '/habits',    label: 'Habits',     icon: '✅' },
-  { path: '/fitness',   label: 'Fitness',    icon: '💪' },
-  { path: '/analytics', label: 'Analytics',  icon: '📊' },
+const NAV_ITEMS: { path: string; label: string; icon: LucideIcon }[] = [
+  { path: '/',          label: 'Dashboard',  icon: LayoutDashboard },
+  { path: '/habits',    label: 'Habits',     icon: CheckCircle2 },
+  { path: '/fitness',   label: 'Fitness',    icon: Dumbbell },
+  { path: '/analytics', label: 'Analytics',  icon: BarChart3 },
+  { path: '/profile',   label: 'Profile',    icon: User },
 ];
 
 const Sidebar = () => {
-  const dispatch   = useAppDispatch();
-  const location   = useLocation();
+  const dispatch    = useAppDispatch();
+  const location    = useLocation();
   const sidebarOpen = useAppSelector((s) => s.ui.sidebarOpen);
+  const user         = useAppSelector((s) => s.auth.currentUser);
 
   const close = () => dispatch(setSidebarOpen(false));
 
@@ -25,6 +28,7 @@ const Sidebar = () => {
           item.path === '/'
             ? location.pathname === '/'
             : location.pathname.startsWith(item.path);
+        const Icon = item.icon;
         return (
           <NavLink
             key={item.path}
@@ -37,7 +41,7 @@ const Sidebar = () => {
                 : 'text-slate-600 dark:text-slate-400 hover:bg-surface-100 dark:hover:bg-surface-700 hover:text-slate-900 dark:hover:text-slate-100'
             )}
           >
-            <span className="text-lg w-6 text-center">{item.icon}</span>
+            <Icon size={18} className="w-6 shrink-0" />
             <span>{item.label}</span>
             {active && (
               <motion.div
@@ -69,9 +73,23 @@ const Sidebar = () => {
       <aside className="hidden lg:flex flex-col w-60 shrink-0 bg-white dark:bg-surface-800 border-r border-surface-200 dark:border-surface-700/60 h-screen sticky top-0">
         <Brand />
         <NavItems />
-        <div className="px-5 py-4 border-t border-surface-100 dark:border-surface-700/60">
-          <p className="text-xs text-slate-400 dark:text-slate-500 text-center">HabitFit v1.0</p>
-        </div>
+        {user && (
+          <NavLink
+            to="/profile"
+            className="px-4 py-3 mx-3 mb-3 rounded-xl border-t border-surface-100 dark:border-surface-700/60 flex items-center gap-3 hover:bg-surface-50 dark:hover:bg-surface-700/50 transition-colors"
+          >
+            <div
+              className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0"
+              style={{ backgroundColor: user.avatarColor }}
+            >
+              {user.name.charAt(0).toUpperCase()}
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-slate-700 dark:text-slate-300 truncate">{user.name}</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 truncate">{user.email}</p>
+            </div>
+          </NavLink>
+        )}
       </aside>
 
       {/* Mobile Drawer */}

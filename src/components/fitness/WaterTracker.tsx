@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
+import { Droplet, GlassWater, CupSoda } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { addWaterEntry } from '@/store/slices/waterSlice';
 import { todayString } from '@/utils/dateUtils';
@@ -9,9 +10,9 @@ import ProgressBar from '@/components/ui/ProgressBar';
 import toast from 'react-hot-toast';
 
 const PRESETS = [
-  { label: '250ml', amount: 250, icon: '🥃' },
-  { label: '500ml', amount: 500, icon: '🥤' },
-  { label: '750ml', amount: 750, icon: '🧴' },
+  { label: '250ml', amount: 250, icon: GlassWater },
+  { label: '500ml', amount: 500, icon: CupSoda },
+  { label: '750ml', amount: 750, icon: Droplet },
 ];
 
 const WaterTracker = () => {
@@ -28,13 +29,15 @@ const WaterTracker = () => {
 
   const handleAdd = (amount: number) => {
     dispatch(addWaterEntry({ date: today, amount }));
-    toast.success(`+${amount}ml logged 💧`);
+    toast.success(`+${amount}ml logged`);
   };
 
   return (
     <div className="bg-white dark:bg-surface-800 rounded-2xl border border-surface-200 dark:border-surface-700 p-5">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="font-semibold text-sm text-slate-900 dark:text-slate-100">💧 Water Intake</h3>
+        <h3 className="font-semibold text-sm text-slate-900 dark:text-slate-100 flex items-center gap-2">
+          <Droplet size={16} className="text-sky-500" /> Water Intake
+        </h3>
         <span className="text-xs text-slate-500 dark:text-slate-400">
           {mlToLitres(todayTotal)}L / {mlToLitres(WATER_GOAL_ML)}L
         </span>
@@ -43,17 +46,20 @@ const WaterTracker = () => {
       <ProgressBar value={percentage} color="bg-sky-500" size="md" />
 
       <div className="flex gap-2 mt-4">
-        {PRESETS.map((p) => (
-          <motion.button
-            key={p.amount}
-            whileTap={{ scale: 0.93 }}
-            onClick={() => handleAdd(p.amount)}
-            className="flex-1 flex flex-col items-center gap-1 py-2.5 rounded-xl bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300 hover:bg-sky-100 dark:hover:bg-sky-900/40 transition-colors"
-          >
-            <span className="text-lg">{p.icon}</span>
-            <span className="text-xs font-medium">{p.label}</span>
-          </motion.button>
-        ))}
+        {PRESETS.map((p) => {
+          const Icon = p.icon;
+          return (
+            <motion.button
+              key={p.amount}
+              whileTap={{ scale: 0.93 }}
+              onClick={() => handleAdd(p.amount)}
+              className="flex-1 flex flex-col items-center gap-1 py-2.5 rounded-xl bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300 hover:bg-sky-100 dark:hover:bg-sky-900/40 transition-colors"
+            >
+              <Icon size={18} />
+              <span className="text-xs font-medium">{p.label}</span>
+            </motion.button>
+          );
+        })}
       </div>
     </div>
   );

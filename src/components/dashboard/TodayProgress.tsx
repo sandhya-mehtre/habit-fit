@@ -1,9 +1,11 @@
+import { Check, ClipboardList } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { toggleCompletion } from '@/store/slices/habitsSlice';
 import { todayString } from '@/utils/dateUtils';
 import Card from '@/components/ui/Card';
 import ProgressBar from '@/components/ui/ProgressBar';
 import EmptyState from '@/components/ui/EmptyState';
+import HabitIcon from '@/components/ui/HabitIcon';
 import { clsx, pct } from '@/utils/helpers';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,7 +22,7 @@ const TodayProgress = () => {
     return (
       <Card>
         <EmptyState
-          icon="📋"
+          icon={ClipboardList}
           title="No habits to track"
           description="Add your first habit to start seeing daily progress here."
           actionLabel="Go to Habits"
@@ -53,13 +55,14 @@ const TodayProgress = () => {
                   done ? 'bg-emerald-500 border-emerald-500' : 'border-surface-300 dark:border-surface-600'
                 )}
               >
-                {done && (
-                  <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                  </svg>
-                )}
+                {done && <Check size={12} strokeWidth={3} className="text-white" />}
               </span>
-              <span className="text-sm">{habit.icon}</span>
+              <span
+                className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0"
+                style={{ backgroundColor: `${habit.color}1A`, color: habit.color }}
+              >
+                <HabitIcon iconKey={habit.icon} size={13} />
+              </span>
               <span className={clsx(
                 'text-sm flex-1 truncate',
                 done ? 'text-slate-400 line-through' : 'text-slate-700 dark:text-slate-300'

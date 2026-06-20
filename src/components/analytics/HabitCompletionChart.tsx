@@ -6,6 +6,7 @@ import { useAppSelector } from '@/store/hooks';
 import { getLast30Days, formatShortDate } from '@/utils/dateUtils';
 import Card from '@/components/ui/Card';
 import EmptyState from '@/components/ui/EmptyState';
+import { TrendingUp } from 'lucide-react';
 import { pct } from '@/utils/helpers';
 
 const HabitCompletionChart = () => {
@@ -27,7 +28,7 @@ const HabitCompletionChart = () => {
   if (habits.length === 0) {
     return (
       <Card>
-        <EmptyState icon="📈" title="No data yet" description="Add habits and start completing them to see trends here." />
+        <EmptyState icon={TrendingUp} title="No data yet" description="Add habits and start completing them to see trends here." />
       </Card>
     );
   }

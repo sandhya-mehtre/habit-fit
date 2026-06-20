@@ -9,6 +9,29 @@ html, body, #root {
 body {
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Respect safe-area insets on notched phones so fixed headers/drawers
+   don't sit under the status bar / home indicator */
+@supports (padding: max(0px)) {
+  .safe-top {
+    padding-top: max(0px, env(safe-area-inset-top));
+  }
+  .safe-bottom {
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Prevent iOS Safari from zooming in on input focus while still allowing
+   normal pinch-zoom elsewhere */
+input, select, textarea {
+  font-size: 16px;
+}
+@media (min-width: 640px) {
+  input, select, textarea {
+    font-size: 14px;
+  }
 }
 
 /* Hide scrollbars for filter pill bars while keeping scroll functional */

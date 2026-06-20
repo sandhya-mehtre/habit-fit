@@ -21,20 +21,24 @@ const HabitFilterBar = ({ selected, onSelect, counts }: HabitFilterBarProps) => 
     >
       All ({counts.all ?? 0})
     </button>
-    {HABIT_CATEGORIES.map((cat) => (
-      <button
-        key={cat.value}
-        onClick={() => onSelect(cat.value)}
-        className={clsx(
-          'shrink-0 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
-          selected === cat.value
-            ? 'bg-primary-600 text-white'
-            : 'bg-surface-100 dark:bg-surface-800 text-slate-600 dark:text-slate-400 hover:bg-surface-200 dark:hover:bg-surface-700'
-        )}
-      >
-        {cat.emoji} {cat.label} ({counts[cat.value] ?? 0})
-      </button>
-    ))}
+    {HABIT_CATEGORIES.map((cat) => {
+      const Icon = cat.icon;
+      return (
+        <button
+          key={cat.value}
+          onClick={() => onSelect(cat.value)}
+          className={clsx(
+            'shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
+            selected === cat.value
+              ? 'bg-primary-600 text-white'
+              : 'bg-surface-100 dark:bg-surface-800 text-slate-600 dark:text-slate-400 hover:bg-surface-200 dark:hover:bg-surface-700'
+          )}
+        >
+          <Icon size={14} />
+          {cat.label} ({counts[cat.value] ?? 0})
+        </button>
+      );
+    })}
   </div>
 );
 

@@ -1,35 +1,44 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import type { WeightEntry, WeightFormValues } from '@/types';
 import { STORAGE_KEYS } from '@/constants';
-import { loadFromStorage, saveToStorage } from '@/utils/storageUtils';
+import { loadFromStorage, saveToStorage, userScopedKey } from '@/utils/storageUtils';
 import { generateId } from '@/utils/helpers';
 
 interface WeightState {
   entries: WeightEntry[];
+  userId: string | null;
 }
 
 const initialState: WeightState = {
-  entries: loadFromStorage<WeightEntry[]>(STORAGE_KEYS.WEIGHT, []),
+  entries: [],
+  userId: null,
 };
 
 const weightSlice = createSlice({
   name: 'weight',
   initialState,
   reducers: {
+    setActiveUser: (state, action: PayloadAction<string | null>) => {
+      state.userId = action.payload;
+      state.entries = loadFromStorage<WeightEntry[]>(
+        userScopedKey(STORAGE_KEYS.WEIGHT, action.payload),
+        []
+      );
+    },
+
     addWeightEntry: (state, action: PayloadAction<WeightFormValues>) => {
-      // Replace existing entry for the same date
       state.entries = state.entries.filter((e) => e.date !== action.payload.date);
       state.entries.push({ id: generateId(), ...action.payload });
       state.entries.sort((a, b) => a.date.localeCompare(b.date));
-      saveToStorage(STORAGE_KEYS.WEIGHT, state.entries);
+      saveToStorage(userScopedKey(STORAGE_KEYS.WEIGHT, state.userId), state.entries);
     },
 
     deleteWeightEntry: (state, action: PayloadAction<string>) => {
       state.entries = state.entries.filter((e) => e.id !== action.payload);
-      saveToStorage(STORAGE_KEYS.WEIGHT, state.entries);
+      saveToStorage(userScopedKey(STORAGE_KEYS.WEIGHT, state.userId), state.entries);
     },
   },
 });
 
-export const { addWeightEntry, deleteWeightEntry } = weightSlice.actions;
+export const { setActiveUser, addWeightEntry, deleteWeightEntry } = weightSlice.actions;
 export default weightSlice.reducer;

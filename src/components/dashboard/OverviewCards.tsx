@@ -1,3 +1,4 @@
+import { CheckCircle2, Flame, Dumbbell, Droplet, Moon } from 'lucide-react';
 import { useAppSelector } from '@/store/hooks';
 import StatCard from '@/components/ui/StatCard';
 import { todayString, getLast7Days } from '@/utils/dateUtils';
@@ -25,7 +26,7 @@ const OverviewCards = () => {
         title="Habits Today"
         value={`${habitsCompletedToday}/${habits.length}`}
         subtitle={habits.length > 0 ? `${pct(habitsCompletedToday, habits.length)}% complete` : 'No habits yet'}
-        icon="✅"
+        icon={CheckCircle2}
         color="from-emerald-500 to-emerald-600"
         delay={0}
       />
@@ -33,7 +34,7 @@ const OverviewCards = () => {
         title="Best Streak"
         value={`${longestCurrentStreak}d`}
         subtitle="Keep it going!"
-        icon="🔥"
+        icon={Flame}
         color="from-orange-500 to-orange-600"
         delay={0.05}
       />
@@ -41,7 +42,7 @@ const OverviewCards = () => {
         title="Workouts (7d)"
         value={workoutsThisWeek}
         subtitle="This week"
-        icon="💪"
+        icon={Dumbbell}
         color="from-primary-500 to-primary-600"
         delay={0.1}
       />
@@ -49,7 +50,7 @@ const OverviewCards = () => {
         title="Water Today"
         value={`${mlToLitres(waterToday)}L`}
         subtitle={`Goal ${mlToLitres(WATER_GOAL_ML)}L`}
-        icon="💧"
+        icon={Droplet}
         color="from-sky-500 to-sky-600"
         delay={0.15}
       />
@@ -58,7 +59,7 @@ const OverviewCards = () => {
           title="Last Sleep"
           value={`${lastSleep.hours}h`}
           subtitle={lastSleep.date === today ? 'Last night' : lastSleep.date}
-          icon="😴"
+          icon={Moon}
           color="from-violet-500 to-violet-600"
           delay={0.2}
         />

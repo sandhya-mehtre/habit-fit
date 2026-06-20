@@ -1,3 +1,54 @@
+// ─── Auth / User ──────────────────────────────────────────────────────────────
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  passwordHash: string;
+  avatarColor: string;
+  createdAt: string;
+  heightCm?: number;
+  goalWeightKg?: number;
+  bio?: string;
+}
+
+export interface PublicUser {
+  id: string;
+  name: string;
+  email: string;
+  avatarColor: string;
+  createdAt: string;
+  heightCm?: number;
+  goalWeightKg?: number;
+  bio?: string;
+}
+
+export interface LoginFormValues {
+  email: string;
+  password: string;
+}
+
+export interface SignupFormValues {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface ProfileFormValues {
+  name: string;
+  email: string;
+  heightCm?: number;
+  goalWeightKg?: number;
+  bio?: string;
+}
+
+export interface PasswordChangeFormValues {
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
 // ─── Habit ────────────────────────────────────────────────────────────────────
 
 export type HabitCategory =

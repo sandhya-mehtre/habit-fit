@@ -49,7 +49,7 @@ const WeeklyMonthlyStats = () => {
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={weeklyData} margin={{ top: 4, right: 8, left: -10, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-            <XAxis dataKey="week" tick={{ fontSize: 10 }} stroke="currentColor" className="text-slate-400" />
+            <XAxis dataKey="week" tick={{ fontSize: 10 }} interval={1} stroke="currentColor" className="text-slate-400" />
             <YAxis yAxisId="left" tick={{ fontSize: 11 }} unit="%" stroke="currentColor" className="text-slate-400" />
             <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 11 }} stroke="currentColor" className="text-slate-400" />
             <Tooltip contentStyle={{ borderRadius: 12, border: 'none', fontSize: 12 }} />

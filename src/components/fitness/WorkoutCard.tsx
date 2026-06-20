@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Trash2, Plus } from 'lucide-react';
 import type { Workout } from '@/types';
 import { WORKOUT_TYPES } from '@/constants';
 import { formatDisplayDate } from '@/utils/dateUtils';
@@ -13,6 +14,7 @@ interface WorkoutCardProps {
 
 const WorkoutCard = ({ workout, onDelete, onAddExercise, index = 0 }: WorkoutCardProps) => {
   const typeInfo = WORKOUT_TYPES.find((t) => t.value === workout.type);
+  const TypeIcon = typeInfo?.icon;
 
   return (
     <motion.div
@@ -24,8 +26,8 @@ const WorkoutCard = ({ workout, onDelete, onAddExercise, index = 0 }: WorkoutCar
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center text-lg shrink-0">
-            {typeInfo?.emoji}
+          <div className="w-10 h-10 rounded-xl bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 flex items-center justify-center shrink-0">
+            {TypeIcon && <TypeIcon size={18} />}
           </div>
           <div>
             <h3 className="font-semibold text-sm text-slate-900 dark:text-slate-100">{workout.name}</h3>
@@ -34,12 +36,10 @@ const WorkoutCard = ({ workout, onDelete, onAddExercise, index = 0 }: WorkoutCar
         </div>
         <button
           onClick={() => onDelete(workout.id)}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+          className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
           aria-label="Delete workout"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
+          <Trash2 size={16} />
         </button>
       </div>
 
@@ -48,7 +48,7 @@ const WorkoutCard = ({ workout, onDelete, onAddExercise, index = 0 }: WorkoutCar
         {workout.caloriesBurned !== undefined && !Number.isNaN(workout.caloriesBurned) && (
           <Badge label={`${workout.caloriesBurned} kcal`} variant="warning" />
         )}
-        <Badge label={typeInfo?.label ?? workout.type} variant="default" />
+        <Badge label={typeInfo?.label ?? workout.type} icon={typeInfo?.icon} variant="default" />
       </div>
 
       {workout.exercises.length > 0 && (
@@ -72,9 +72,9 @@ const WorkoutCard = ({ workout, onDelete, onAddExercise, index = 0 }: WorkoutCar
 
       <button
         onClick={() => onAddExercise(workout)}
-        className="mt-3 text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline"
+        className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline"
       >
-        + Add Exercise
+        <Plus size={13} /> Add Exercise
       </button>
     </motion.div>
   );

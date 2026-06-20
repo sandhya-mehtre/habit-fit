@@ -1,4 +1,5 @@
 import { AnimatePresence } from 'framer-motion';
+import { Target } from 'lucide-react';
 import type { Habit } from '@/types';
 import HabitCard from './HabitCard';
 import EmptyState from '@/components/ui/EmptyState';
@@ -15,7 +16,7 @@ const HabitList = ({ habits, onToggle, onEdit, onDelete, onCreateNew }: HabitLis
   if (habits.length === 0) {
     return (
       <EmptyState
-        icon="🎯"
+        icon={Target}
         title="No habits yet"
         description="Start building better routines by creating your first habit to track."
         actionLabel="Create Habit"

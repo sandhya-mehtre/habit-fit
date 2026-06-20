@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
+import { Dumbbell, Droplet, Moon, Scale, Trash2, type LucideIcon } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { addWorkout, deleteWorkout, addExercise } from '@/store/slices/workoutsSlice';
 import { addWeightEntry, deleteWeightEntry } from '@/store/slices/weightSlice';
@@ -24,11 +25,11 @@ import { formatDisplayDate } from '@/utils/dateUtils';
 
 type Tab = 'workouts' | 'weight' | 'sleep' | 'water';
 
-const TABS: { id: Tab; label: string; icon: string }[] = [
-  { id: 'workouts', label: 'Workouts', icon: '💪' },
-  { id: 'water',    label: 'Water',    icon: '💧' },
-  { id: 'sleep',    label: 'Sleep',    icon: '😴' },
-  { id: 'weight',   label: 'Weight',   icon: '⚖️' },
+const TABS: { id: Tab; label: string; icon: LucideIcon }[] = [
+  { id: 'workouts', label: 'Workouts', icon: Dumbbell },
+  { id: 'water',    label: 'Water',    icon: Droplet },
+  { id: 'sleep',    label: 'Sleep',    icon: Moon },
+  { id: 'weight',   label: 'Weight',   icon: Scale },
 ];
 
 const FitnessPage = () => {
@@ -77,21 +78,24 @@ const FitnessPage = () => {
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }} className="space-y-5">
       {/* Tab bar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1">
-        {TABS.map((t) => (
-          <button
-            key={t.id}
-            onClick={() => setTab(t.id)}
-            className={clsx(
-              'shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-colors',
-              tab === t.id
-                ? 'bg-primary-600 text-white'
-                : 'bg-white dark:bg-surface-800 text-slate-600 dark:text-slate-400 border border-surface-200 dark:border-surface-700 hover:bg-surface-50 dark:hover:bg-surface-700'
-            )}
-          >
-            <span>{t.icon}</span> {t.label}
-          </button>
-        ))}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-none">
+        {TABS.map((t) => {
+          const Icon = t.icon;
+          return (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className={clsx(
+                'shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-colors',
+                tab === t.id
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-white dark:bg-surface-800 text-slate-600 dark:text-slate-400 border border-surface-200 dark:border-surface-700 hover:bg-surface-50 dark:hover:bg-surface-700'
+              )}
+            >
+              <Icon size={15} /> {t.label}
+            </button>
+          );
+        })}
       </div>
 
       <AnimatePresence mode="wait">
@@ -111,7 +115,7 @@ const FitnessPage = () => {
               {workouts.length === 0 ? (
                 <Card>
                   <EmptyState
-                    icon="💪"
+                    icon={Dumbbell}
                     title="No workouts logged"
                     description="Start tracking your workouts to monitor your fitness journey."
                     actionLabel="Log Workout"
@@ -149,14 +153,16 @@ const FitnessPage = () => {
               </div>
               {sleepEntries.length === 0 ? (
                 <Card>
-                  <EmptyState icon="😴" title="No sleep logged" description="Track your sleep hours and quality." actionLabel="Log Sleep" onAction={() => setSleepFormOpen(true)} />
+                  <EmptyState icon={Moon} title="No sleep logged" description="Track your sleep hours and quality." actionLabel="Log Sleep" onAction={() => setSleepFormOpen(true)} />
                 </Card>
               ) : (
                 <div className="space-y-2">
                   {[...sleepEntries].reverse().map((s) => (
                     <Card key={s.id} className="flex items-center justify-between !p-4">
                       <div className="flex items-center gap-3">
-                        <span className="text-xl">😴</span>
+                        <span className="w-9 h-9 rounded-xl bg-violet-50 dark:bg-violet-900/30 text-violet-500 flex items-center justify-center shrink-0">
+                          <Moon size={17} />
+                        </span>
                         <div>
                           <p className="text-sm font-medium text-slate-800 dark:text-slate-200">
                             {s.hours}h · Quality {s.quality}/5
@@ -166,10 +172,8 @@ const FitnessPage = () => {
                           </p>
                         </div>
                       </div>
-                      <button onClick={() => setDeleteSleepId(s.id)} className="p-1.5 text-slate-400 hover:text-red-500 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
+                      <button onClick={() => setDeleteSleepId(s.id)} className="p-2 text-slate-400 hover:text-red-500 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30">
+                        <Trash2 size={16} />
                       </button>
                     </Card>
                   ))}
@@ -186,23 +190,23 @@ const FitnessPage = () => {
               </div>
               {weightEntries.length === 0 ? (
                 <Card>
-                  <EmptyState icon="⚖️" title="No weight entries" description="Record your weight to track progress over time." actionLabel="Log Weight" onAction={() => setWeightFormOpen(true)} />
+                  <EmptyState icon={Scale} title="No weight entries" description="Record your weight to track progress over time." actionLabel="Log Weight" onAction={() => setWeightFormOpen(true)} />
                 </Card>
               ) : (
                 <div className="space-y-2">
                   {[...weightEntries].reverse().map((w) => (
                     <Card key={w.id} className="flex items-center justify-between !p-4">
                       <div className="flex items-center gap-3">
-                        <span className="text-xl">⚖️</span>
+                        <span className="w-9 h-9 rounded-xl bg-amber-50 dark:bg-amber-900/30 text-amber-500 flex items-center justify-center shrink-0">
+                          <Scale size={17} />
+                        </span>
                         <div>
                           <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{w.weight} kg</p>
                           <p className="text-xs text-slate-500 dark:text-slate-400">{formatDisplayDate(w.date)}</p>
                         </div>
                       </div>
-                      <button onClick={() => setDeleteWeightId(w.id)} className="p-1.5 text-slate-400 hover:text-red-500 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
+                      <button onClick={() => setDeleteWeightId(w.id)} className="p-2 text-slate-400 hover:text-red-500 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/30">
+                        <Trash2 size={16} />
                       </button>
                     </Card>
                   ))}

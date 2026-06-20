@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
+import { Check, Pencil, Trash2, Flame } from 'lucide-react';
 import type { Habit } from '@/types';
 import { todayString } from '@/utils/dateUtils';
 import { clsx } from '@/utils/helpers';
 import Badge from '@/components/ui/Badge';
+import HabitIcon from '@/components/ui/HabitIcon';
 import { HABIT_CATEGORIES } from '@/constants';
 
 interface HabitCardProps {
@@ -43,15 +45,18 @@ const HabitCard = ({ habit, onToggle, onEdit, onDelete, index = 0 }: HabitCardPr
               : 'border-surface-300 dark:border-surface-600 hover:border-primary-400 text-transparent'
           )}
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-          </svg>
+          <Check size={14} strokeWidth={3} />
         </button>
 
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-lg leading-none">{habit.icon}</span>
+            <span
+              className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0"
+              style={{ backgroundColor: `${habit.color}1A`, color: habit.color }}
+            >
+              <HabitIcon iconKey={habit.icon} size={14} />
+            </span>
             <h3 className={clsx(
               'font-semibold text-sm text-slate-900 dark:text-slate-100 truncate',
               isCompletedToday && 'line-through text-slate-400 dark:text-slate-500'
@@ -67,35 +72,36 @@ const HabitCard = ({ habit, onToggle, onEdit, onDelete, index = 0 }: HabitCardPr
           )}
 
           <div className="flex items-center gap-2 mt-2.5 flex-wrap">
-            <Badge label={categoryInfo?.label ?? habit.category} variant="default" size="sm" />
+            <Badge
+              label={categoryInfo?.label ?? habit.category}
+              icon={categoryInfo?.icon}
+              variant="default"
+              size="sm"
+            />
             <Badge label={habit.frequency === 'daily' ? 'Daily' : `${habit.targetDays}x/week`} variant="info" size="sm" />
             {habit.streak > 0 && (
               <span className="inline-flex items-center gap-1 text-xs font-semibold text-orange-500">
-                🔥 {habit.streak} day{habit.streak !== 1 ? 's' : ''}
+                <Flame size={13} className="fill-orange-500" /> {habit.streak} day{habit.streak !== 1 ? 's' : ''}
               </span>
             )}
           </div>
         </div>
 
-        {/* Actions */}
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        {/* Actions — always visible on mobile (no hover on touch), hover-reveal on sm+ */}
+        <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
           <button
             onClick={() => onEdit(habit)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors"
+            className="p-2 rounded-lg text-slate-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/30 transition-colors"
             aria-label="Edit habit"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
+            <Pencil size={15} />
           </button>
           <button
             onClick={() => onDelete(habit.id)}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+            className="p-2 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
             aria-label="Delete habit"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
+            <Trash2 size={15} />
           </button>
         </div>
       </div>

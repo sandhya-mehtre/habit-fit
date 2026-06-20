@@ -1,23 +1,35 @@
 import type { HabitCategory, WorkoutType } from '@/types';
+import {
+  Heart,
+  Dumbbell,
+  Flower2,
+  BookOpen,
+  Zap,
+  Users,
+  Sparkles,
+  type LucideIcon,
+} from 'lucide-react';
+import { Footprints, Flame, PersonStanding, Target as TargetIcon } from 'lucide-react';
+import { HABIT_ICON_KEYS } from './icons';
 
-export const HABIT_CATEGORIES: { value: HabitCategory; label: string; emoji: string }[] = [
-  { value: 'health',        label: 'Health',        emoji: '❤️'  },
-  { value: 'fitness',       label: 'Fitness',       emoji: '💪'  },
-  { value: 'mindfulness',   label: 'Mindfulness',   emoji: '🧘'  },
-  { value: 'learning',      label: 'Learning',      emoji: '📚'  },
-  { value: 'productivity',  label: 'Productivity',  emoji: '⚡'  },
-  { value: 'social',        label: 'Social',        emoji: '👥'  },
-  { value: 'other',         label: 'Other',         emoji: '✨'  },
+export const HABIT_CATEGORIES: { value: HabitCategory; label: string; icon: LucideIcon }[] = [
+  { value: 'health',        label: 'Health',        icon: Heart },
+  { value: 'fitness',       label: 'Fitness',       icon: Dumbbell },
+  { value: 'mindfulness',   label: 'Mindfulness',   icon: Flower2 },
+  { value: 'learning',      label: 'Learning',      icon: BookOpen },
+  { value: 'productivity',  label: 'Productivity',  icon: Zap },
+  { value: 'social',        label: 'Social',        icon: Users },
+  { value: 'other',         label: 'Other',         icon: Sparkles },
 ];
 
-export const WORKOUT_TYPES: { value: WorkoutType; label: string; emoji: string }[] = [
-  { value: 'strength',    label: 'Strength',    emoji: '🏋️' },
-  { value: 'cardio',      label: 'Cardio',      emoji: '🏃' },
-  { value: 'hiit',        label: 'HIIT',        emoji: '🔥' },
-  { value: 'yoga',        label: 'Yoga',        emoji: '🧘' },
-  { value: 'stretching',  label: 'Stretching',  emoji: '🤸' },
-  { value: 'sports',      label: 'Sports',      emoji: '⚽' },
-  { value: 'other',       label: 'Other',       emoji: '🎯' },
+export const WORKOUT_TYPES: { value: WorkoutType; label: string; icon: LucideIcon }[] = [
+  { value: 'strength',    label: 'Strength',    icon: Dumbbell },
+  { value: 'cardio',      label: 'Cardio',      icon: Footprints },
+  { value: 'hiit',        label: 'HIIT',        icon: Flame },
+  { value: 'yoga',        label: 'Yoga',        icon: Flower2 },
+  { value: 'stretching',  label: 'Stretching',  icon: PersonStanding },
+  { value: 'sports',      label: 'Sports',      icon: PersonStanding },
+  { value: 'other',       label: 'Other',       icon: TargetIcon },
 ];
 
 export const HABIT_COLORS = [
@@ -26,10 +38,8 @@ export const HABIT_COLORS = [
   '#06b6d4', '#3b82f6',
 ];
 
-export const HABIT_ICONS = [
-  '💧', '🏃', '🧘', '📚', '💪', '🥗', '😴', '🎯',
-  '🧠', '❤️', '⚡', '🌱', '🎵', '✍️', '🏊', '🚴',
-];
+/** Icon keys selectable when creating/editing a habit — see constants/icons.ts */
+export const HABIT_ICONS = HABIT_ICON_KEYS;
 
 export const WATER_GOAL_ML = 2500;
 export const SLEEP_GOAL_HOURS = 8;
@@ -40,7 +50,16 @@ export const STORAGE_KEYS = {
   WATER:    'habitfit_water',
   SLEEP:    'habitfit_sleep',
   THEME:    'habitfit_theme',
+  USERS:    'habitfit_users',
+  SESSION:  'habitfit_session',
 } as const;
+
+export const AVATAR_COLORS = [
+  '#6366f1', '#ec4899', '#f97316', '#22c55e',
+  '#06b6d4', '#8b5cf6', '#ef4444', '#14b8a6',
+];
+
+export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 export const MONTHS = [

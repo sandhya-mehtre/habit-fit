@@ -5,6 +5,7 @@ import { useAppSelector } from '@/store/hooks';
 import { formatShortDate } from '@/utils/dateUtils';
 import Card from '@/components/ui/Card';
 import EmptyState from '@/components/ui/EmptyState';
+import { Scale } from 'lucide-react';
 
 const WeightTrendChart = () => {
   const entries = useAppSelector((s) => s.weight.entries);
@@ -17,7 +18,7 @@ const WeightTrendChart = () => {
   if (entries.length === 0) {
     return (
       <Card>
-        <EmptyState icon="⚖️" title="No weight data" description="Log your weight to start tracking your trend over time." />
+        <EmptyState icon={Scale} title="No weight data" description="Log your weight to start tracking your trend over time." />
       </Card>
     );
   }

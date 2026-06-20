@@ -1,4 +1,5 @@
 import { clsx } from '@/utils/helpers';
+import type { LucideIcon } from 'lucide-react';
 
 type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
 
@@ -7,6 +8,7 @@ interface BadgeProps {
   variant?: BadgeVariant;
   size?: 'sm' | 'md';
   dot?: boolean;
+  icon?: LucideIcon;
   className?: string;
 }
 
@@ -33,6 +35,7 @@ const Badge = ({
   variant = 'default',
   size = 'sm',
   dot = false,
+  icon: Icon,
   className,
 }: BadgeProps) => (
   <span
@@ -46,6 +49,7 @@ const Badge = ({
     {dot && (
       <span className={clsx('w-1.5 h-1.5 rounded-full', dotColors[variant])} />
     )}
+    {Icon && <Icon size={size === 'sm' ? 12 : 14} className="shrink-0" />}
     {label}
   </span>
 );
